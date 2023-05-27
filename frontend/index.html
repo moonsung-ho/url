@@ -52,9 +52,7 @@
       /></label>
     </div> -->
     <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon3"
-        >https://sungho.xyz/</span
-      >
+      <span class="input-group-text" id="basic-addon3">https://</span>
       <input
         type="text"
         class="form-control"
@@ -76,6 +74,9 @@
       document.querySelector("#input").value = Math.random()
         .toString(36)
         .substr(2, 6);
+      document.querySelector(
+        "#basic-addon3"
+      ).innerHTML = `https://${location.host}/`;
       document.querySelector("#submit").addEventListener("click", (event) => {
         const url = document.querySelector("#urlinput").value;
         const to = document.querySelector("#input").value;
