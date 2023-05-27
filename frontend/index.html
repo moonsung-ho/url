@@ -117,6 +117,16 @@
                     navigator.clipboard.writeText(
                       `https://${location.host}/${to}`
                     );
+                    Toastify({
+                      text: `클립보드에 복사했어요.`,
+                      duration: 2000,
+                      gravity: "bottom", // `top` or `bottom`
+                      position: "center", // `left`, `center` or `right`
+                      stopOnFocus: true, // Prevents dismissing of toast on hover
+                      style: {
+                        "font-family": "Pretendard"
+                      }
+                    }).showToast();
                   } // Callback after click
                 }).showToast();
               } else {
