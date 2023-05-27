@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>url 단축기</title>
+    <title>url 단축기 - 세모</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -36,31 +36,42 @@
       placeholder="https://example.com"
     /> -->
     <h1 class="fw-bolder">URL 단축하기</h1>
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon31">줄일 URL</span>
-      <input
-        type="url"
-        class="form-control"
-        id="urlinput"
-        aria-describedby="basic-addon31"
-        placeholder="https://example.com"
-      />
-    </div>
-    <!-- <div id="inputtext">
+    <form>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon31">줄일 URL</span>
+        <input
+          type="url"
+          class="form-control required"
+          id="urlinput"
+          aria-describedby="basic-addon31"
+          placeholder="https://example.com"
+          required
+        />
+      </div>
+      <!-- <div id="inputtext">
       <label for="input"
         >ㅇㅇ<input type="text" name="링크" id="input"
       /></label>
     </div> -->
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon3">https://</span>
-      <input
-        type="text"
-        class="form-control"
-        id="input"
-        aria-describedby="basic-addon3"
-      />
-    </div>
-    <input class="btn btn-primary" type="submit" value="줄이기" id="submit" />
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon3">https://</span>
+        <input
+          type="text"
+          class="form-control"
+          id="input"
+          aria-describedby="basic-addon3"
+        />
+      </div>
+      <input class="btn btn-primary" type="submit" value="줄이기" id="submit" />
+    </form>
+    <footer class="fixed-bottom">
+      <span>문성호</span>
+      <a
+        class="link-success link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+        href="https://github.com/moonsung-ho"
+        >Github</a
+      >
+    </footer>
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/toastify-js"
@@ -78,22 +89,66 @@
         "#basic-addon3"
       ).innerHTML = `https://${location.host}/`;
       document.querySelector("#submit").addEventListener("click", (event) => {
+        event.preventDefault();
         const url = document.querySelector("#urlinput").value;
         const to = document.querySelector("#input").value;
         console.log(`${location.host}/shorten?url=${url}&to=${to}`);
-        fetch(`/shorten/?url=${url}&to=${to}`);
-        Toastify({
-          text: `${location.host}/${to}`,
-          duration: 3000,
-          destination: `https://${location.host}/${to}`,
-          gravity: "bottom", // `top` or `bottom`
-          position: "center", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            "font-family": "Pretendard"
-          },
-          onClick: function () {} // Callback after click
-        }).showToast();
+        if (
+          url !== "" &&
+          to !== "" &&
+          url.includes("://") &&
+          url.includes(".")
+        ) {
+          fetch(`/shorten/?url=${url}&to=${to}`)
+            .then((response) => response.json())
+            .then((json) => {
+              console.log(json.status);
+              if (json.status === "successed") {
+                Toastify({
+                  text: `${location.host}/${to}, 클릭해서 복사하기`,
+                  duration: 3000,
+                  gravity: "bottom", // `top` or `bottom`
+                  position: "center", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    "font-family": "Pretendard"
+                  },
+                  onClick: function () {
+                    navigator.clipboard.writeText(
+                      `https://${location.host}/${to}`
+                    );
+                  } // Callback after click
+                }).showToast();
+              } else {
+                Toastify({
+                  text: `이미 존재하는 단축 URL이에요. 다른 걸로 바꿔서 시도해 보세요.`,
+                  duration: 3000,
+                  gravity: "bottom", // `top` or `bottom`
+                  position: "center", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    "font-family": "Pretendard"
+                  },
+                  onClick: function () {} // Callback after click
+                }).showToast();
+                document.querySelector("#input").value = Math.random()
+                  .toString(36)
+                  .substr(2, 6);
+              }
+            });
+        } else {
+          Toastify({
+            text: `제대로 된 URL을 입력하세요.`,
+            duration: 3000,
+            gravity: "bottom", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              "font-family": "Pretendard"
+            },
+            onClick: function () {} // Callback after click
+          }).showToast();
+        }
       });
       if (location.search.split("=")[1] === "urldoesnotexist") {
         Toastify({

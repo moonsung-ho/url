@@ -29,9 +29,9 @@ app.get("/shorten", (req, res) => {
     console.log(result);
     if (result.length === 0) {
       model.create({ url: req.query.url, to: req.query.to });
-      res.redirect("/?type=success");
+      res.json({ status: "successed" });
     } else {
-      res.redirect("/?type=urlalreadyexists");
+      res.json({ status: "failed" });
     }
   });
 });
@@ -53,5 +53,5 @@ app.get("/*", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`app working on ${port}`);
 });
