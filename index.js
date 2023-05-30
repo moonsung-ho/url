@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 mongoose
   .connect(
-    "mongodb+srv://moonsungho:tME4M4uS0tavR3hQ@urlshortener.ju9kyl1.mongodb.net/?retryWrites=true&w=majority",
+    `mongodb+srv://moonsungho:${process.env.MONGODB_PW}@urlshortener.ju9kyl1.mongodb.net/?retryWrites=true&w=majority`,
     {
       // useNewUrlPaser: true,
       // useUnifiedTofology: true,
