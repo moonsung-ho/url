@@ -17,12 +17,13 @@ mongoose
   )
   .then(() => console.log("MongoDB conected"))
   .catch((err) => {
+    console.log(process.env.MONGODB_PW);
     console.log(err);
   });
 
 const urlSchema = new mongoose.Schema({
   url: String,
-  to: String
+  to: String,
 });
 const model = mongoose.model("url", urlSchema);
 
