@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
+const https = require("https");
 const port = 3000;
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -56,5 +58,14 @@ app.get("/*", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`app working on ${port}`);
+  console.log(`HTTP working on ${port}`);
+});
+
+const options = {
+  key: fs.readFileSync(__dirname + "/certs/cemo.site.key"),
+  cert: fs.readFileSync(__dirname + "/certs/cemo.site.pem"),
+};
+
+https.createServer(options, app).listen(3001, () => {
+  console.log("HTTPS working on 3001");
 });
